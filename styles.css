@@ -4,13 +4,13 @@
     --text: #1f2937;
     --muted: #5b6778;
     --brand: #1976d2;
-    /* kühles Blau */
-    --brand-2: #00a2a8;   /* Bodensee-Türkis */
+    --brand-2: #00a2a8;
     --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     --radius: 14px;
     --line: #97c7de;
     --arrow: var(--brand);
     --arrow-bypass: var(--brand-2);
+    --step-gap: 64px;
 }
 
 *,
@@ -26,7 +26,7 @@ body {
 
 body {
     margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     color: var(--text);
     background: linear-gradient(180deg, #f6fafc 0%, #eef7fb 100%);
 }
@@ -68,15 +68,15 @@ body {
 
 .timeline {
     position: relative;
-    margin: 24px 0 80px;
-    padding-bottom: 40px;
+    margin: 28px 0 100px;
+    padding: 10px 0 70px;
 }
 
 .step {
     background: var(--card);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    margin: 26px auto;
+    margin: var(--step-gap) auto;
     padding: 0;
     width: min(720px, 92vw);
     transition: transform 160ms ease-out, box-shadow 160ms ease-out;
@@ -88,13 +88,18 @@ body {
     /* über den Pfeilen */
 }
 
-/* Hover/Fokus-Feedback */
+/* Optionale Stationen: schmaler und rechtsbündig */
+.step.optional {
+    width: min(560px, 88vw);
+    margin-left: auto;
+    margin-right: 0;
+}
+
 .step:focus-within,
 .step:hover {
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
 }
 
-/* Header/Überschrift immer sichtbar */
 .step-header {
     list-style: none;
     display: flex;
@@ -116,7 +121,6 @@ body {
     margin: 0;
 }
 
-/* Chevron-Icon (animiert) */
 .chevron {
     --s: 12px;
     width: var(--s);
@@ -131,7 +135,6 @@ body {
     transform: rotate(-135deg);
 }
 
-/* Inhalt (Akkordeon) */
 .step-content {
     padding: 0 20px 18px 20px;
     color: var(--text);
@@ -145,7 +148,6 @@ body {
 
 .step[open] .step-content {
     max-height: 1000px;
-    /* ausreichend groß für Inhalte */
     opacity: 1;
 }
 
@@ -173,7 +175,7 @@ body {
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0; /* hinter den Karten */ 
+    z-index: 0;
     pointer-events: none;
 }
 
@@ -185,18 +187,18 @@ body {
 
 .flow-path.main {
     stroke: var(--arrow);
-    stroke-width: 12;
-    /* deutlich breiter /
-opacity: 0.45;      / leicht transparent */
+    color: var(--arrow);
+    stroke-width: 16;
+    opacity: 0.5;
 }
 
 .flow-path.bypass {
     stroke: var(--arrow-bypass);
-    stroke-width: 10;
-    opacity: 0.4;
+    color: var(--arrow-bypass);
+    stroke-width: 14;
+    opacity: 0.45;
 }
 
-/* Footer */
 .site-footer {
     color: #5f6b7a;
     font-size: 0.95rem;
@@ -205,13 +207,11 @@ opacity: 0.45;      / leicht transparent */
     background: #f7fbfe;
 }
 
-/* Barrierefreiheit/Focus */
 summary.step-header:focus {
     outline: 3px solid rgba(25, 118, 210, 0.35);
     outline-offset: 2px;
 }
 
-/* Responsives Tuning */
 @media (max-width: 560px) {
     .step-header {
         padding: 16px 16px;
@@ -219,5 +219,9 @@ summary.step-header:focus {
 
     .step-content {
         padding: 0 16px 16px 16px;
+    }
+
+    .step.optional {
+        width: min(520px, 92vw);
     }
 }
