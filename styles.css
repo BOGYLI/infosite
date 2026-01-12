@@ -4,8 +4,8 @@
     --text: #1f2937;
     --muted: #5b6778;
     --brand: #1976d2;
-    /* kühles Blau /
---brand-2: #00a2a8;   / Bodensee-Türkis */
+    /* kühles Blau */
+    --brand-2: #00a2a8;   /* Bodensee-Türkis */
     --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     --radius: 14px;
     --line: #97c7de;
