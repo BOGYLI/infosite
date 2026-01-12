@@ -25,8 +25,25 @@
                 Kultusministeriums. </p>
         </section>
         <section class="timeline" aria-label="Ablauf des Übertritts">
+            <!-- Overlay-SVG für Pfeile -->
+            <svg id="flow" class="flow" aria-hidden="true" preserveAspectRatio="none">
+                <defs>
+                    <!-- Hauptpfeil-Kopf (breit, leicht transparent) -->
+                    <marker id="arrowHeadMain" viewBox="0 0 16 16" refX="14" refY="8" markerWidth="16" markerHeight="16"
+                        orient="auto">
+                        <path d="M0,0 L16,8 L0,16 Z" fill="currentColor" opacity="0.7"></path>
+                    </marker>
+                    <!-- Bypass-Pfeil-Kopf (zweite Farbe) -->
+                    <marker id="arrowHeadBypass" viewBox="0 0 16 16" refX="14" refY="8" markerWidth="16"
+                        markerHeight="16" orient="auto">
+                        <path d="M0,0 L16,8 L0,16 Z" fill="currentColor" opacity="0.7"></path>
+                    </marker>
+                </defs>
+                <g id="flowPaths"></g>
+            </svg>
+
             <!-- 1 -->
-            <details class="step" open>
+            <details class="step" id="step-1" open>
                 <summary class="step-header">
                     <h2 class="step-title">Grundschule (Übertrittsphase)</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -50,21 +67,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead)" />
-                </svg>
-            </div>
-
             <!-- 2 -->
-            <details class="step">
+            <details class="step" id="step-2">
                 <summary class="step-header">
                     <h2 class="step-title">Tag der offenen Tür</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -83,22 +87,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <use href="#arrowPath"></use>
-                    <defs>
-                        <marker id="arrowHead2" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead2)" />
-                </svg>
-            </div>
-
-            <!-- 3 -->
-            <details class="step">
+            <!-- 3 (optional) -->
+            <details class="step" id="step-3" data-optional="true">
                 <summary class="step-header">
                     <h2 class="step-title">(optional) Schnupperunterricht</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -115,21 +105,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead3" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead3)" />
-                </svg>
-            </div>
-
             <!-- 4 -->
-            <details class="step">
+            <details class="step" id="step-4">
                 <summary class="step-header">
                     <h2 class="step-title">Anmeldung</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -149,21 +126,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead4" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead4)" />
-                </svg>
-            </div>
-
-            <!-- 5 -->
-            <details class="step">
+            <!-- 5 (optional) -->
+            <details class="step" id="step-5" data-optional="true">
                 <summary class="step-header">
                     <h2 class="step-title">(optional) Probeunterricht</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -187,21 +151,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead5" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead5)" />
-                </svg>
-            </div>
-
             <!-- 6 -->
-            <details class="step">
+            <details class="step" id="step-6">
                 <summary class="step-header">
                     <h2 class="step-title">Erster Elternbrief</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -220,21 +171,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead6" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead6)" />
-                </svg>
-            </div>
-
             <!-- 7 -->
-            <details class="step">
+            <details class="step" id="step-7">
                 <summary class="step-header">
                     <h2 class="step-title">Erster Schultag</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -253,21 +191,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead7" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead7)" />
-                </svg>
-            </div>
-
             <!-- 8 -->
-            <details class="step">
+            <details class="step" id="step-8">
                 <summary class="step-header">
                     <h2 class="step-title">Zweiter Schultag</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -281,21 +206,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead8" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead8)" />
-                </svg>
-            </div>
-
             <!-- 9 -->
-            <details class="step">
+            <details class="step" id="step-9">
                 <summary class="step-header">
                     <h2 class="step-title">Kennenlerntage</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -314,21 +226,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead9" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead9)" />
-                </svg>
-            </div>
-
             <!-- 10 -->
-            <details class="step">
+            <details class="step" id="step-10">
                 <summary class="step-header">
                     <h2 class="step-title">Erster Zwischenbericht</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -345,21 +244,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead10" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead10)" />
-                </svg>
-            </div>
-
             <!-- 11 -->
-            <details class="step">
+            <details class="step" id="step-11">
                 <summary class="step-header">
                     <h2 class="step-title">Wahl der zweiten Fremdsprache</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -377,21 +263,8 @@
                 </div>
             </details>
 
-            <div class="connector" aria-hidden="true">
-                <svg viewBox="0 0 80 140" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <marker id="arrowHead11" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"
-                            markerUnits="strokeWidth">
-                            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"></path>
-                        </marker>
-                    </defs>
-                    <path d="M40 5 C 10 35, 70 85, 40 115" fill="none" stroke="currentColor" stroke-width="3"
-                        marker-end="url(#arrowHead11)" />
-                </svg>
-            </div>
-
             <!-- 12 -->
-            <details class="step">
+            <details class="step" id="step-12">
                 <summary class="step-header">
                     <h2 class="step-title">Erstes Jahreszeugnis</h2>
                     <span class="chevron" aria-hidden="true"></span>
@@ -407,8 +280,6 @@
                     </ul>
                 </div>
             </details>
-
-            <!-- Ende Timeline -->
         </section>
     </main>
     <footer class="site-footer" role="contentinfo">
@@ -416,31 +287,108 @@
             <p> Bodensee-Gymnasium Lindau • Kontakt: Sekretariat • Impressum | Datenschutz </p>
         </div>
     </footer>
-    <script> // Scroll-Scaling: vergrößert Elemente zur vertikalen Mitte hin bis ca. 1.2x 
+    <script> // Scroll-Scaling und dynamische Pfeile 
         (function () { 
-            const steps = Array.from(document.querySelectorAll('.step')); 
+            const timeline = document.querySelector('.timeline'); 
+            const steps = Array.from(timeline.querySelectorAll('.step')); 
+            const svg = document.getElementById('flow'); 
+            const pathsGroup = document.getElementById('flowPaths'); 
             let ticking = false; 
             function updateScale() { 
-                const vh = window.innerHeight; const center = vh / 2; 
+                const vh = window.innerHeight; 
+                const center = vh / 2; 
                 for (const el of steps) { 
                     const rect = el.getBoundingClientRect(); 
                     const elCenter = rect.top + rect.height / 2; 
-                    const distance = Math.abs(elCenter - center); // Map distance to scale: 1.2 in der Mitte, 1.0 am Rand 
-                    const influence = Math.max(0, 1 - distance / center); // 1 in der Mitte, 0 am Rand 
+                    const distance = Math.abs(elCenter - center); 
+                    const influence = Math.max(0, 1 - distance / center); 
                     const scale = 1 + 0.2 * influence; // bis +20% 
                     el.style.transform = `scale(${scale.toFixed(3)})`; 
                 } 
+            } 
+            function getAnchor(el) { 
+                const tlRect = timeline.getBoundingClientRect(); 
+                const r = el.getBoundingClientRect(); 
+                return { 
+                    top: { x: r.left + r.width / 2 - tlRect.left, y: r.top - tlRect.top }, 
+                    bottom: { x: r.left + r.width / 2 - tlRect.left, y: r.bottom - tlRect.top } 
+                }; 
+            } 
+            function cubicPath(x1, y1, x2, y2) { 
+                const dY = Math.max(40, y2 - y1); 
+                const c = Math.min(240, dY * 0.45); 
+                return `M ${x1} ${y1} C ${x1} ${y1 + c}, ${x2} ${y2 - c}, ${x2} ${y2}`; 
+            } 
+            // Bypass mit seitlichem „Vorbeiführen“ nahe der optionalen Karte 
+            function bypassPath(x1, y1, x2, y2, optRectCenterY, sideOffset) { 
+                const midY = optRectCenterY; 
+                const xMid = x1 + sideOffset; // seitlicher Bauch 
+                const dTotal = Math.max(60, y2 - y1); 
+                const cHalf = Math.min(180, dTotal * 0.25); // Zwei Kubiksegmente, vertikale Tangenten an Start/Mitte/Ende 
+                return [ 
+                    `M ${x1} ${y1} C ${x1} ${y1 + cHalf}, ${xMid} ${midY - cHalf}, ${xMid} ${midY}`, 
+                    `C ${xMid} ${midY + cHalf}, ${x2} ${y2 - cHalf}, ${x2} ${y2}` ].join(' '); 
+            } 
+            function renderFlow() { 
+                // SVG-Größe an Timeline anpassen 
+                svg.setAttribute('width', timeline.clientWidth); 
+                svg.setAttribute('height', timeline.clientHeight); 
+                // Alte Pfade entfernen 
+                while (pathsGroup.firstChild) pathsGroup.removeChild(pathsGroup.firstChild); 
+                // Hauptverbindungen zwischen aufeinanderfolgenden Schritten 
+                for (let i = 0; i < steps.length - 1; i++) { 
+                    const a1 = getAnchor(steps[i]).bottom; 
+                    const a2 = getAnchor(steps[i + 1]).top; 
+                    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); 
+                    p.setAttribute('d', cubicPath(a1.x, a1.y, a2.x, a2.y)); 
+                    p.setAttribute('class', 'flow-path main'); 
+                    p.setAttribute('marker-end', 'url(#arrowHeadMain)'); 
+                    pathsGroup.appendChild(p); 
+                } 
+                // Bypass für optionale Schritte (verbindet den vorherigen mit dem nächsten Schritt) 
+                for (let j = 0; j < steps.length; j++) { 
+                    const opt = steps[j]; 
+                    if (opt.dataset.optional === 'true') { 
+                        const prev = steps[j - 1]; 
+                        const next = steps[j + 1]; 
+                        if (!prev || !next) continue; 
+                        const aPrev = getAnchor(prev).bottom; 
+                        const aNext = getAnchor(next).top; 
+                        // Position der optionalen Karte für den „Bauch“ des Bypass 
+                        const optRect = opt.getBoundingClientRect(); 
+                        const tlRect = timeline.getBoundingClientRect(); 
+                        const optCenterY = (optRect.top + optRect.bottom) / 2 - tlRect.top; 
+                        // Seite wählen (rechts), und bei wenig Platz automatisch nach links ausweichen 
+                        const rightSpace = timeline.clientWidth - aPrev.x - 40; 
+                        const leftSpace = aPrev.x - 40; 
+                        const preferredOffset = 80; 
+                        const sideOffset = rightSpace > preferredOffset ? preferredOffset : (leftSpace > preferredOffset ? -preferredOffset : 0); 
+                        const pathD = bypassPath(aPrev.x, aPrev.y, aNext.x, aNext.y, optCenterY, sideOffset); 
+                        const bp = document.createElementNS('http://www.w3.org/2000/svg', 'path'); 
+                        bp.setAttribute('d', pathD); bp.setAttribute('class', 'flow-path bypass'); 
+                        bp.setAttribute('marker-end', 'url(#arrowHeadBypass)'); pathsGroup.appendChild(bp); 
+                    } 
+                } 
+            } 
+            function updateAll() { 
+                updateScale(); 
+                renderFlow(); 
                 ticking = false; 
             } 
-            function onScroll() { 
+            function onScrollOrResize() { 
                 if (!ticking) { 
-                    window.requestAnimationFrame(updateScale); 
+                    window.requestAnimationFrame(updateAll); 
                     ticking = true; 
                 } 
             } 
-            window.addEventListener('scroll', onScroll, { passive: true }); 
-            window.addEventListener('resize', updateScale); // Initial 
-            updateScale(); 
+            window.addEventListener('scroll', onScrollOrResize, { passive: true }); 
+            window.addEventListener('resize', onScrollOrResize); 
+            // Auf-/Zuklappen neu zeichnen 
+            steps.forEach(s => { 
+                s.addEventListener('toggle', onScrollOrResize); 
+            }); 
+            // Initial 
+            updateAll(); 
         })(); 
     </script>
 </body>
