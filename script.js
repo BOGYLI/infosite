@@ -1,11 +1,55 @@
-// Scroll-Scaling und dynamische Pfeile – kompatibel (ES5)
+// Zufällige Kartenbreiten/-positionen, durchgängige Ankerpunkte pro Element,
+// breite Linien ohne Pfeilspitzen – ES5-kompatibel
 (function () {
     var timeline = document.querySelector('.timeline');
     if (!timeline) return;
     var steps = Array.prototype.slice.call(timeline.querySelectorAll('.step'));
     var svg = document.getElementById('flow');
     var pathsGroup = document.getElementById('flowPaths');
+    var EDGE_PAD = 22;         // Innenabstand für Ankerpunkte von der Kartenkante
+    var MIN_DELTA_FACTOR = 0.08; // Mindest-x-Abstand relativ zur Timelinebreite
     var ticking = false;
+    var randomized = false;
+    function randBetween(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    function clamp(val, min, max) {
+        return Math.max(min, Math.min(max, val));
+    }
+    // Initial zufällige Layout-Parameter speichern (stabil bei Resize)
+    function randomizeLayout() {
+        for (var i = 0; i < steps.length; i++) {
+            var el = steps[i];
+            var isOpt = el.getAttribute('data-optional') === 'true';
+            // Breiten-Faktor: optional etwas schmaler
+            var wf = isOpt ? randBetween(0.55, 0.75) : randBetween(0.65, 0.95);
+            // Positions-Faktor: optional eher rechts
+            var pf = isOpt ? randBetween(0.65, 0.95) : randBetween(0.05, 0.95);
+            // Ein durchgängiger Anker-Faktor (gleicher Punkt für oben/unten)
+            var ax = randBetween(0.25, 0.75); // nicht zu nah am Rand
+
+            el.setAttribute('data-wf', wf.toFixed(4));
+            el.setAttribute('data-pf', pf.toFixed(4));
+            el.setAttribute('data-ax', ax.toFixed(4));
+        }
+        randomized = true;
+        applyLayoutFromData();
+    }
+    function applyLayoutFromData() {
+        var tlWidth = timeline.clientWidth;
+        for (var i = 0; i < steps.length; i++) {
+            var el = steps[i];
+            var wf = parseFloat(el.getAttribute('data-wf') || '0.8');
+            var pf = parseFloat(el.getAttribute('data-pf') || '0.5');
+            var widthPx = Math.round(tlWidth * wf);
+            var maxLeft = Math.max(0, tlWidth - widthPx);
+            var leftPx = Math.round(maxLeft * pf);
+
+            el.style.width = widthPx + 'px';
+            el.style.marginLeft = leftPx + 'px';
+            el.style.marginRight = '0';
+        }
+    }
     function updateScale() {
         var vh = window.innerHeight || document.documentElement.clientHeight;
         var center = vh / 2;
@@ -19,53 +63,88 @@
             el.style.transform = 'scale(' + scale.toFixed(3) + ')';
         }
     }
-    function getAnchor(el) {
+    function getRectRel(el) {
         var tlRect = timeline.getBoundingClientRect();
         var r = el.getBoundingClientRect();
         return {
-            top: {
-                x: r.left + r.width / 2 - tlRect.left,
-                y: r.top - tlRect.top
-            },
-            bottom: {
-                x: r.left + r.width / 2 - tlRect.left,
-                y: r.bottom - tlRect.top
-            }
+            left: r.left - tlRect.left,
+            top: r.top - tlRect.top,
+            right: r.right - tlRect.left,
+            bottom: r.bottom - tlRect.top,
+            width: r.width,
+            height: r.height
         };
     }
-    // Vertikale Tangenten am Start und Ende – weiche Kubik-Bezier
+    // Durchgängige Ankerpunkte (gleicher x für oben/unten), mit Innenabstand
+    function getAnchors(el) {
+        var rr = getRectRel(el);
+        var ax = parseFloat(el.getAttribute('data-ax') || '0.5');
+        var xMin = rr.left + EDGE_PAD;
+        var xMax = rr.right - EDGE_PAD;
+        var x = clamp(rr.left + rr.width * ax, xMin, xMax);
+        return {
+            top: { x: x, y: rr.top },
+            bottom: { x: x, y: rr.bottom },
+            rect: rr
+        };
+    }
+    // Vertikale Tangenten am Start/Ende – weiche Kubik-Bezier
     function cubicPath(x1, y1, x2, y2) {
         var dY = Math.max(60, y2 - y1);
-        var c = Math.min(260, dY * 0.45);
+        var c = Math.min(300, dY * 0.45);
         return 'M ' + x1 + ' ' + y1 +
             ' C ' + x1 + ' ' + (y1 + c) + ', ' + x2 + ' ' + (y2 - c) + ', ' + x2 + ' ' + y2;
     }
-    // Bypass: führt mit Seitenabstand am optionalen Element vorbei
-    function bypassAroundOptional(aPrev, aNext, optRect, tlRect, timelineWidth) {
-        var clearance = 28; // Abstand zum optionalen Element
-        var optLeft = optRect.left - tlRect.left;
-        var optRight = optRect.right - tlRect.left;
-        var yTop = optRect.top - tlRect.top;
-        var yBottom = optRect.bottom - tlRect.top;
-        // Bevorzugt links vorbeiführen (optional ist rechtsbündig),
-        // bei wenig Platz nach rechts ausweichen
-        var minEdge = 24;
-        var preferredLeftX = Math.max(minEdge, optLeft - clearance);
-        var preferredRightX = Math.min(timelineWidth - minEdge, optRight + clearance);
+    // Mindest-x-Abstand zwischen aufeinanderfolgenden Ankern sicherstellen,
+    // indem der Anker des nächsten Elements angepasst wird (und persistiert bleibt).
+    function ensureMinDelta(prevAnchorX, nextEl, minDelta) {
+        var anchorsNext = getAnchors(nextEl);
+        var nextX = anchorsNext.top.x;
+        var dx = Math.abs(nextX - prevAnchorX);
+        if (dx < minDelta) {
+            var targetX = prevAnchorX + (nextX >= prevAnchorX ? minDelta : -minDelta);
+            var xMin = anchorsNext.rect.left + EDGE_PAD;
+            var xMax = anchorsNext.rect.right - EDGE_PAD;
+            var newX = clamp(targetX, xMin, xMax);
 
-        var useLeft = (preferredLeftX > minEdge + 20); // genug Platz links
-        var bypassX = useLeft ? preferredLeftX : preferredRightX;
+            // neuen Faktor berechnen und am Element speichern
+            var newAx = (newX - anchorsNext.rect.left) / anchorsNext.rect.width;
+            nextEl.setAttribute('data-ax', newAx.toFixed(4));
 
-        // Kontrollpunktabstände pro Segment
+            // aktualisierte Anchors zurückgeben
+            return getAnchors(nextEl);
+        }
+        return anchorsNext;
+    }
+    // Bypass um optionales Element: seitlicher Korridor mit Abstand
+    function bypassAroundOptional(aPrev, optEl, aNext) {
+        var tlRect = timeline.getBoundingClientRect();
+        var optRectAbs = optEl.getBoundingClientRect();
+        var rrOptLeft = optRectAbs.left - tlRect.left;
+        var rrOptRight = optRectAbs.right - tlRect.left;
+        var yTop = optRectAbs.top - tlRect.top;
+        var yBottom = optRectAbs.bottom - tlRect.top;
+
+        var clearance = 36; // Abstand zum optionalen Element
+        var minEdge = 28;
+        var tlWidth = timeline.clientWidth;
+
+        // bevorzugt links (optional meist rechts), sonst rechts
+        var leftX = Math.max(minEdge, rrOptLeft - clearance);
+        var rightX = Math.min(tlWidth - minEdge, rrOptRight + clearance);
+        var useLeft = (leftX > minEdge + 24);
+        var bypassX = useLeft ? leftX : rightX;
+
+        // Kontrollpunktabstände
         var d1 = Math.max(60, yTop - aPrev.y);
         var dMid = Math.max(60, yBottom - yTop);
         var d2 = Math.max(60, aNext.y - yBottom);
 
-        var c1 = Math.min(220, d1 * 0.45);
-        var cMid = Math.min(200, dMid * 0.35);
-        var c2 = Math.min(220, d2 * 0.45);
+        var c1 = Math.min(260, d1 * 0.45);
+        var cMid = Math.min(240, dMid * 0.40);
+        var c2 = Math.min(260, d2 * 0.45);
 
-        // Drei Segmente mit vertikalen Tangenten an Start, Oberkante, Unterkante, Ende
+        // Drei Segmente mit vertikalen Tangenten; durchgängiger Korridor neben dem optionalen Element
         var dPath =
             'M ' + aPrev.x + ' ' + aPrev.y +
             ' C ' + aPrev.x + ' ' + (aPrev.y + c1) + ', ' + bypassX + ' ' + (yTop - c1) + ', ' + bypassX + ' ' + yTop +
@@ -85,19 +164,23 @@
             pathsGroup.removeChild(pathsGroup.firstChild);
         }
 
-        // Hauptverbindungen
+        var minDelta = Math.max(50, Math.round(timeline.clientWidth * MIN_DELTA_FACTOR));
+
+        // Hauptverbindungen zwischen aufeinanderfolgenden Schritten
         for (var i = 0; i < steps.length - 1; i++) {
-            var a1 = getAnchor(steps[i]).bottom;
-            var a2 = getAnchor(steps[i + 1]).top;
+            var prevAnchors = getAnchors(steps[i]);
+            var nextAnchors = ensureMinDelta(prevAnchors.bottom.x, steps[i + 1], minDelta);
+
+            var aPrev = prevAnchors.bottom;
+            var aNext = nextAnchors.top;
 
             var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            p.setAttribute('d', cubicPath(a1.x, a1.y, a2.x, a2.y));
+            p.setAttribute('d', cubicPath(aPrev.x, aPrev.y, aNext.x, aNext.y));
             p.setAttribute('class', 'flow-path main');
-            p.setAttribute('marker-end', 'url(#arrowHeadMain)');
             pathsGroup.appendChild(p);
         }
 
-        // Bypass für optionale Schritte (vorheriger -> nächster Schritt)
+        // Bypass für optionale Schritte (vorheriger -> nächster Schritt), mit Seitenabstand
         for (var j = 0; j < steps.length; j++) {
             var opt = steps[j];
             if (opt.getAttribute('data-optional') === 'true') {
@@ -105,23 +188,20 @@
                 var next = steps[j + 1];
                 if (!prev || !next) continue;
 
-                var aPrev = getAnchor(prev).bottom;
-                var aNext = getAnchor(next).top;
+                var prevAnchors = getAnchors(prev);
+                var nextAnchors = ensureMinDelta(prevAnchors.bottom.x, next, minDelta);
 
-                var optRect = opt.getBoundingClientRect();
-                var tlRect = timeline.getBoundingClientRect();
-
-                var pathD = bypassAroundOptional(aPrev, aNext, optRect, tlRect, timeline.clientWidth);
+                var dBypass = bypassAroundOptional(prevAnchors.bottom, opt, nextAnchors.top);
 
                 var bp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                bp.setAttribute('d', pathD);
+                bp.setAttribute('d', dBypass);
                 bp.setAttribute('class', 'flow-path bypass');
-                bp.setAttribute('marker-end', 'url(#arrowHeadBypass)');
                 pathsGroup.appendChild(bp);
             }
         }
     }
     function updateAll() {
+        if (!randomized) randomizeLayout(); else applyLayoutFromData();
         updateScale();
         renderFlow();
         ticking = false;
@@ -134,6 +214,7 @@
     }
     window.addEventListener('scroll', onScrollOrResize, { passive: true });
     window.addEventListener('resize', onScrollOrResize);
+    // Auf-/Zuklappen neu zeichnen
     for (var k = 0; k < steps.length; k++) {
         steps[k].addEventListener('toggle', onScrollOrResize);
     }

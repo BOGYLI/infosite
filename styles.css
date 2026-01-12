@@ -9,7 +9,7 @@
     --radius: 14px;
     --arrow: var(--brand);
     --arrow-bypass: var(--brand-2);
-    --step-gap: 144px;
+    --step-gap: 76px;
     /* Abstand zwischen Karten */
 }
 
@@ -68,31 +68,29 @@ body {
 
 .timeline {
     position: relative;
-    margin: 28px 0 100px;
-    padding: 10px 0 70px;
+    margin: 28px 0 110px;
+    padding: 10px 0 80px;
 }
 
 .step {
     background: var(--card);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    margin: var(--step-gap) auto;
+    margin: var(--step-gap) 0;
     padding: 0;
     width: min(720px, 92vw);
+    /* Fallback – Skript setzt konkrete Breite/Position */
     transition: transform 160ms ease-out, box-shadow 160ms ease-out;
     will-change: transform;
     transform-origin: center center;
     outline: none;
     position: relative;
-    z-index: 1;
-    /* über den Pfeilen */
+    z-index: 1;/ über den Linien */
 }
 
-/* Optionale Stationen: schmaler, rechtsbündig */
+/* Optional: optisch etwas schmaler (Fallback, wird durch Skript konkretisiert) */
 .step.optional {
-    width: min(560px, 88vw);
-    margin-left: auto;
-    margin-right: 0;
+    width: min(600px, 90vw);
 }
 
 .step:focus-within,
@@ -169,13 +167,14 @@ body {
     font-size: 0.95rem;
 }
 
-/* SVG-Overlay */
+/* SVG-Overlay: breite Linien ohne Spitzen */
 .flow {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     z-index: 0;
+    /* hinter den Karten */
     pointer-events: none;
 }
 
@@ -185,19 +184,17 @@ body {
     stroke-linejoin: round;
 }
 
-/* Breite Striche, kleine Köpfe (Marker nutzen currentColor) */
 .flow-path.main {
     stroke: var(--arrow);
-    color: var(--arrow);
-    stroke-width: 20;
-    opacity: 0.48;
+    stroke-width: 30;
+    /* deutlich breiter */
+    opacity: 0.52;
 }
 
 .flow-path.bypass {
     stroke: var(--arrow-bypass);
-    color: var(--arrow-bypass);
-    stroke-width: 16;
-    opacity: 0.45;
+    stroke-width: 26;
+    opacity: 0.50;
 }
 
 .site-footer {
@@ -220,9 +217,5 @@ summary.step-header:focus {
 
     .step-content {
         padding: 0 16px 16px 16px;
-    }
-
-    .step.optional {
-        width: min(520px, 92vw);
     }
 }
