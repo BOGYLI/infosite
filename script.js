@@ -15,7 +15,7 @@
             var elCenter = rect.top + rect.height / 2;
             var distance = Math.abs(elCenter - center);
             var influence = Math.max(0, 1 - distance / center);
-            var scale = 1 + 0.2 * influence; // bis +20%
+            var scale = 1 + 0.2 * influence;
             el.style.transform = 'scale(' + scale.toFixed(3) + ')';
         }
     }
@@ -40,17 +40,39 @@
         return 'M ' + x1 + ' ' + y1 +
             ' C ' + x1 + ' ' + (y1 + c) + ', ' + x2 + ' ' + (y2 - c) + ', ' + x2 + ' ' + y2;
     }
-    // Bypass führt seitlich am optionalen Schritt vorbei (bevorzugt links)
-    function bypassPath(x1, y1, x2, y2, optRectCenterY, sideOffset) {
-        var midY = optRectCenterY;
-        var xMid = x1 + sideOffset;
-        var dTotal = Math.max(80, y2 - y1);
-        var cHalf = Math.min(200, dTotal * 0.25);
-        return [
-            'M ' + x1 + ' ' + y1 +
-            ' C ' + x1 + ' ' + (y1 + cHalf) + ', ' + xMid + ' ' + (midY - cHalf) + ', ' + xMid + ' ' + midY,
-            'C ' + xMid + ' ' + (midY + cHalf) + ', ' + x2 + ' ' + (y2 - cHalf) + ', ' + x2 + ' ' + y2
-        ].join(' ');
+    // Bypass: führt mit Seitenabstand am optionalen Element vorbei
+    function bypassAroundOptional(aPrev, aNext, optRect, tlRect, timelineWidth) {
+        var clearance = 28; // Abstand zum optionalen Element
+        var optLeft = optRect.left - tlRect.left;
+        var optRight = optRect.right - tlRect.left;
+        var yTop = optRect.top - tlRect.top;
+        var yBottom = optRect.bottom - tlRect.top;
+        // Bevorzugt links vorbeiführen (optional ist rechtsbündig),
+        // bei wenig Platz nach rechts ausweichen
+        var minEdge = 24;
+        var preferredLeftX = Math.max(minEdge, optLeft - clearance);
+        var preferredRightX = Math.min(timelineWidth - minEdge, optRight + clearance);
+
+        var useLeft = (preferredLeftX > minEdge + 20); // genug Platz links
+        var bypassX = useLeft ? preferredLeftX : preferredRightX;
+
+        // Kontrollpunktabstände pro Segment
+        var d1 = Math.max(60, yTop - aPrev.y);
+        var dMid = Math.max(60, yBottom - yTop);
+        var d2 = Math.max(60, aNext.y - yBottom);
+
+        var c1 = Math.min(220, d1 * 0.45);
+        var cMid = Math.min(200, dMid * 0.35);
+        var c2 = Math.min(220, d2 * 0.45);
+
+        // Drei Segmente mit vertikalen Tangenten an Start, Oberkante, Unterkante, Ende
+        var dPath =
+            'M ' + aPrev.x + ' ' + aPrev.y +
+            ' C ' + aPrev.x + ' ' + (aPrev.y + c1) + ', ' + bypassX + ' ' + (yTop - c1) + ', ' + bypassX + ' ' + yTop +
+            ' C ' + bypassX + ' ' + (yTop + cMid) + ', ' + bypassX + ' ' + (yBottom - cMid) + ', ' + bypassX + ' ' + yBottom +
+            ' C ' + bypassX + ' ' + (yBottom + c2) + ', ' + aNext.x + ' ' + (aNext.y - c2) + ', ' + aNext.x + ' ' + aNext.y;
+
+        return dPath;
     }
     function renderFlow() {
         if (!svg || !pathsGroup) return;
@@ -88,20 +110,9 @@
 
                 var optRect = opt.getBoundingClientRect();
                 var tlRect = timeline.getBoundingClientRect();
-                var optCenterY = (optRect.top + optRect.bottom) / 2 - tlRect.top;
 
-                // Bevorzugt links vorbeiführen (da optional rechtsbündig),
-                // bei wenig Platz nach rechts ausweichen
-                var preferredOffset = 110;
-                var leftSpace = aPrev.x - 60;
-                var rightSpace = timeline.clientWidth - aPrev.x - 60;
+                var pathD = bypassAroundOptional(aPrev, aNext, optRect, tlRect, timeline.clientWidth);
 
-                var sideOffset = -Math.min(preferredOffset, Math.max(60, leftSpace));
-                if (Math.abs(sideOffset) < 60 && rightSpace > 80) {
-                    sideOffset = Math.min(preferredOffset, rightSpace);
-                }
-
-                var pathD = bypassPath(aPrev.x, aPrev.y, aNext.x, aNext.y, optCenterY, sideOffset);
                 var bp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 bp.setAttribute('d', pathD);
                 bp.setAttribute('class', 'flow-path bypass');

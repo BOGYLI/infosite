@@ -7,10 +7,10 @@
     --brand-2: #00a2a8;
     --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     --radius: 14px;
-    --line: #97c7de;
     --arrow: var(--brand);
     --arrow-bypass: var(--brand-2);
-    --step-gap: 64px;
+    --step-gap: 144px;
+    /* Abstand zwischen Karten */
 }
 
 *,
@@ -88,7 +88,7 @@ body {
     /* über den Pfeilen */
 }
 
-/* Optionale Stationen: schmaler und rechtsbündig */
+/* Optionale Stationen: schmaler, rechtsbündig */
 .step.optional {
     width: min(560px, 88vw);
     margin-left: auto;
@@ -169,7 +169,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* SVG-Overlay für die Verbinder */
+/* SVG-Overlay */
 .flow {
     position: absolute;
     inset: 0;
@@ -185,17 +185,18 @@ body {
     stroke-linejoin: round;
 }
 
+/* Breite Striche, kleine Köpfe (Marker nutzen currentColor) */
 .flow-path.main {
     stroke: var(--arrow);
     color: var(--arrow);
-    stroke-width: 16;
-    opacity: 0.5;
+    stroke-width: 20;
+    opacity: 0.48;
 }
 
 .flow-path.bypass {
     stroke: var(--arrow-bypass);
     color: var(--arrow-bypass);
-    stroke-width: 14;
+    stroke-width: 16;
     opacity: 0.45;
 }
 

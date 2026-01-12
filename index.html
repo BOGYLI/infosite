@@ -26,15 +26,17 @@
         </section>
         <section class="timeline" aria-label="Ablauf des Übertritts">
             <!-- Overlay-SVG für Pfeile -->
-            <svg id="flow" class="flow" aria-hidden="true" preserveAspectRatio="none">
+            <svg id="flow" class="flow" aria-hidden="true" preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <marker id="arrowHeadMain" viewBox="0 0 16 16" refX="14" refY="8" markerWidth="18" markerHeight="18"
-                        orient="auto">
-                        <path d="M0,0 L16,8 L0,16 Z" fill="currentColor" opacity="0.7"></path>
+                    <!-- Kleine Pfeilspitzen, feste Größe (unabhängig von Strichbreite) -->
+                    <marker id="arrowHeadMain" viewBox="0 0 12 12" refX="12" refY="6" markerUnits="userSpaceOnUse"
+                        markerWidth="12" markerHeight="12" orient="auto">
+                        <path d="M0,0 L12,6 L0,12 Z" fill="currentColor" opacity="0.7"></path>
                     </marker>
-                    <marker id="arrowHeadBypass" viewBox="0 0 16 16" refX="14" refY="8" markerWidth="18"
-                        markerHeight="18" orient="auto">
-                        <path d="M0,0 L16,8 L0,16 Z" fill="currentColor" opacity="0.7"></path>
+                    <marker id="arrowHeadBypass" viewBox="0 0 12 12" refX="12" refY="6" markerUnits="userSpaceOnUse"
+                        markerWidth="12" markerHeight="12" orient="auto">
+                        <path d="M0,0 L12,6 L0,12 Z" fill="currentColor" opacity="0.7"></path>
                     </marker>
                 </defs>
                 <g id="flowPaths"></g>
@@ -92,8 +94,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>
-                        Dein Kind kann in eine Unterrichtsstunde hineinschauen und Atmosphäre, Fächer und Räume erleben.
+                    <p>Dein Kind kann in eine Unterrichtsstunde hineinschauen und Atmosphäre, Fächer und Räume erleben.
                     </p>
                     <ul>
                         <li>Anmeldung über das Sekretariat erforderlich</li>
@@ -110,17 +111,13 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>
-                        Die Anmeldung findet in der Regel kurz nach Ausgabe des Übertrittszeugnisses statt.
-                    </p>
+                    <p>Die Anmeldung findet in der Regel kurz nach Ausgabe des Übertrittszeugnisses statt.</p>
                     <ul>
-                        <li>Erforderliche Unterlagen: Übertrittszeugnis im Original, Geburtsurkunde (Kopie), Nachweis
-                            Masernschutz, ggf. Sorgerechtsnachweis</li>
-                        <li>Formulare der Schule ausfüllen (Daten, Ganztag, Religion/Ethik, Einwilligungen)</li>
-                        <li>Bus-/Schülerinnen- und Schülerticket beantragen (falls nötig)</li>
+                        <li>Übertrittszeugnis (Original), Geburtsurkunde (Kopie), Masernschutz, ggf. Sorgerechtsnachweis
+                        </li>
+                        <li>Formulare der Schule ausfüllen</li>
+                        <li>Schülerinnen- und Schülerticket beantragen (falls nötig)</li>
                     </ul>
-                    <p class="small">Die genauen Termine und Formulare veröffentlichen wir rechtzeitig auf der
-                        Schulwebsite.</p>
                 </div>
             </details>
 
@@ -131,21 +128,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>
-                        Falls die Voraussetzungen für den direkten Übertritt ins Gymnasium nicht vorliegen, kann ein
-                        Probeunterricht
-                        stattfinden. Er wird zentral terminiert und umfasst in der Regel Deutsch und Mathematik.
-                    </p>
-                    <ul>
-                        <li>Anmeldung über das aufnehmende Gymnasium</li>
-                        <li>Durchführung an wenigen aufeinanderfolgenden Tagen</li>
-                        <li>Ergebnis wird schriftlich mitgeteilt</li>
-                    </ul>
-                    <p class="small">
-                        Bitte beachte: Die genauen Regelungen (z. B. Notengrenzen und Bestehensregel) legt das
-                        Kultusministerium fest.
-                        Maßgeblich sind die aktuellen Hinweise auf den offiziellen Seiten.
-                    </p>
+                    <p>Bei nicht direktem Übertritt: zentral terminierter Probeunterricht (Deutsch, Mathematik).</p>
                 </div>
             </details>
 
@@ -156,16 +139,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>
-                        Vor den Sommerferien erhältst du den ersten Elternbrief des Gymnasiums. Darin stehen
-                        Klasseneinteilung,
-                        Materialliste, Informationen zu Leihbüchern, Terminen und digitalen Zugängen.
-                    </p>
-                    <ul>
-                        <li>Material- und Bücherliste</li>
-                        <li>Organisation des ersten Schultags</li>
-                        <li>Ansprechpersonen und Kontaktwege</li>
-                    </ul>
+                    <p>Vor den Sommerferien: Klasseneinteilung, Materialliste, Termine, Zugänge.</p>
                 </div>
             </details>
 
@@ -176,9 +150,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>
-                        Begrüßung der neuen Fünftklässlerinnen und Fünftklässler, Klasseneinteilung und Kennenlernen.
-                    </p>
+                    <p>Begrüßung, Klasseneinteilung und Kennenlernen mit der Klassenleitung.</p>
                 </div>
             </details>
 
@@ -189,7 +161,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>Start mit dem regulären Stundenplan, Ausgabe von Büchern und Heften.</p>
+                    <p>Start mit regulärem Stundenplan, Ausgabe von Büchern und Heften.</p>
                 </div>
             </details>
 
@@ -200,7 +172,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>Stärkung der Klassengemeinschaft mit Teamtraining und gemeinsamen Aktivitäten.</p>
+                    <p>Teamtraining, Medienbildung und gemeinsame Aktivitäten.</p>
                 </div>
             </details>
 
@@ -211,7 +183,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>Erste Rückmeldung zum Leistungsstand im Schuljahr.</p>
+                    <p>Rückmeldung zum Leistungsstand, ggf. Beratung und Förderung.</p>
                 </div>
             </details>
 
@@ -222,7 +194,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>Ende der 5. Klasse Wahl von Latein oder Französisch.</p>
+                    <p>Ende der 5. Klasse Wahl z. B. Latein oder Französisch.</p>
                 </div>
             </details>
 
@@ -233,7 +205,7 @@
                     <span class="chevron" aria-hidden="true"></span>
                 </summary>
                 <div class="step-content">
-                    <p>Zeugnis am Schuljahresende mit Leistungen und besonderen Engagements.</p>
+                    <p>Leistungen, Verhalten und besondere Engagements dokumentiert.</p>
                 </div>
             </details>
         </section>
@@ -245,5 +217,4 @@
     </footer>
     <script src="script.js" defer></script>
 </body>
-
 </html>
