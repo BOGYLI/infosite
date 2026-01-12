@@ -1,0 +1,212 @@
+:root {
+    --bg: #f6fafc;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #5b6778;
+    --brand: #1976d2;
+    /* kühles Blau /
+--brand-2: #00a2a8; / Bodensee-Türkis */
+    --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    --radius: 14px;
+    --line: #97c7de;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: var(--text);
+    background: linear-gradient(180deg, #f6fafc 0%, #eef7fb 100%);
+}
+
+.container {
+    width: min(900px, 92vw);
+    margin: 0 auto;
+}
+
+.site-header {
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    color: white;
+    padding: 32px 0 28px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.site-header h1 {
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.subtitle {
+    margin: 0;
+    opacity: 0.95;
+}
+
+.intro {
+    margin: 28px 0 6px;
+    color: var(--muted);
+}
+
+.note {
+    background: #e9f4ff;
+    border-left: 4px solid var(--brand);
+    padding: 10px 12px;
+    border-radius: 6px;
+}
+
+.timeline {
+    position: relative;
+    margin: 24px 0 80px;
+}
+
+.step {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin: 26px auto;
+    padding: 0;
+    width: min(720px, 92vw);
+    transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+    will-change: transform;
+    transform-origin: center center;
+    outline: none;
+}
+
+/* Hover/Fokus-Feedback */
+.step:focus-within,
+.step:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+/* Header/Überschrift immer sichtbar */
+.step-header {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+    padding: 18px 20px;
+}
+
+.step-header::-webkit-details-marker {
+    display: none;
+}
+
+.step-title {
+    font-size: clamp(1.05rem, 1vw + 0.8rem, 1.35rem);
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Chevron-Icon (animiert) */
+.chevron {
+    --s: 12px;
+    width: var(--s);
+    height: var(--s);
+    border-right: 3px solid var(--brand);
+    border-bottom: 3px solid var(--brand);
+    transform: rotate(45deg);
+    transition: transform 200ms ease;
+}
+
+.step[open] .chevron {
+    transform: rotate(-135deg);
+}
+
+/* Inhalt (Akkordeon) */
+.step-content {
+    padding: 0 20px 18px 20px;
+    color: var(--text);
+    line-height: 1.55;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 280ms ease, opacity 240ms ease;
+    border-top: 1px solid #f0f4f8;
+}
+
+.step[open] .step-content {
+    max-height: 1000px;
+    /* ausreichend groß für Inhalte */
+    opacity: 1;
+}
+
+.step-content p {
+    margin: 14px 0;
+}
+
+.step-content ul {
+    margin: 10px 0 0 18px;
+    padding: 0 0 0 6px;
+}
+
+.step-content li {
+    margin: 6px 0;
+}
+
+.small {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+/* Verbinder: weich geschwungene Pfeile zwischen den Elementen */
+.connector {
+    display: grid;
+    place-items: center;
+    height: 120px;
+    color: var(--line);
+    pointer-events: none;
+}
+
+.connector svg {
+    width: 48px;
+    height: 120px;
+    display: block;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+}
+
+/* Footer */
+.site-footer {
+    color: #5f6b7a;
+    font-size: 0.95rem;
+    padding: 24px 0 40px;
+    border-top: 1px solid #e6edf3;
+    background: #f7fbfe;
+}
+
+/* Barrierefreiheit/Focus */
+summary.step-header:focus {
+    outline: 3px solid rgba(25, 118, 210, 0.35);
+    outline-offset: 2px;
+}
+
+/* Responsive Feinheiten */
+@media (max-width: 560px) {
+    .step-header {
+        padding: 16px 16px;
+    }
+
+    .step-content {
+        padding: 0 16px 16px 16px;
+    }
+
+    .connector {
+        height: 100px;
+    }
+
+    .connector svg {
+        height: 100px;
+    }
+}
