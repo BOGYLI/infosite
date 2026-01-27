@@ -3,8 +3,8 @@
     --card: #ffffff;
     --text: #1f2937;
     --muted: #5b6778;
-    --brand: #1976d2;
-    --brand-2: #00a2a8;
+    --brand: #005594;
+    --brand-2: #445594;
     --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     --radius: 14px;
     --arrow: var(--brand);
@@ -34,6 +34,7 @@ body {
 .container {
     width: min(900px, 92vw);
     margin: 0 auto;
+    vertical-align: middle;
 }
 
 .site-header {
@@ -41,17 +42,31 @@ body {
     color: white;
     padding: 32px 0 28px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.site-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    flex-shrink: 0;
+    float: left;
+    margin-right: 20px;
 }
 
 .site-header h1 {
-    margin: 0 0 6px 0;
+    margin: 15px 0 6px 0;
     font-weight: 700;
+    font-size: 2.0rem;
     letter-spacing: 0.3px;
 }
 
 .subtitle {
     margin: 0;
     opacity: 0.95;
+    font-size: 1.4rem;
 }
 
 .intro {
@@ -70,29 +85,96 @@ body {
     position: relative;
     margin: 28px 0 110px;
     padding: 10px 0 80px;
+    /* Platz unten für Linien */
 }
 
+/* Wasserzeichen: sehr große, transparente Jahrgangszahl links */
+.grade-indicator {
+position: sticky;
+top: 12vh;
+height: 0;
+pointer-events: none;
+z-index: 0; /* hinter Karten/Linien */
+}
+.grade-indicator .grade-number {
+position: absolute;
+left: -12vw; /* leicht außerhalb des Inhalts */
+top: -4vh;
+font-size: clamp(140px, 24vw, 280px);
+font-weight: 900;
+color: var(--brand);
+opacity: 0.06;      /* sehr transparent – Wasserzeichen-Effekt */
+letter-spacing: 2px;
+line-height: 1;
+user-select: none;
+}
+
+/* Trennlinie der Jahrgangsstufe */
+.grade-separator {
+position: relative;
+width: 100%;
+margin: 44px 0;
+height: 0;
+}
+.grade-separator .grade-line {
+position: relative;
+height: 0;
+border-top: 3px dashed rgba(25, 118, 210, 0.22); /* dezent, gut sichtbar */
+}
+
+.grade-separator::before {
+    content: attr(data-grade) " . Klasse";
+    position: absolute;
+    left: 0;
+    top: -18px;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+/* Karten/Steps */
 .step {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    margin: var(--step-gap) 0;
-    padding: 0;
-    width: min(720px, 92vw);
-    /* Fallback – Skript setzt konkrete Breite/Position */
-    transition: transform 160ms ease-out, box-shadow 160ms ease-out;
-    will-change: transform;
-    transform-origin: center center;
-    outline: none;
-    position: relative;
-    z-index: 1;/ über den Linien */
+background: var(--card);
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+margin: var(--step-gap) 0;
+padding: 0;
+width: min(720px, 92vw); /* Fallback – Skript setzt konkrete Breite/Position */
+transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+will-change: transform;
+transform-origin: center center;
+outline: none;
+position: relative;
+z-index: 1; /* über den Linien */
 }
 
-/* Optional: optisch etwas schmaler (Fallback, wird durch Skript konkretisiert) */
+/* Optionale Stationen: optisch etwas schmaler (Fallback, wird durch Skript konkretisiert) */
 .step.optional {
     width: min(600px, 90vw);
 }
 
+/* Zeugnis-/Bericht-Rahmen (ohne Zickzack): doppelte, dezente Kontur */
+.step.certificate {
+border: 3px solid rgba(0, 162, 168, 0.35);
+border-radius: 22px;
+position: relative;
+}
+.step.certificate::before {
+content: "";
+position: absolute;
+inset: -8px;                /* äußerer Ring */
+border: 6px solid rgba(25, 118, 210, 0.16);
+border-radius: 26px;
+pointer-events: none;
+z-index: 0;
+}
+
+.step.certificate .step-header,
+.step.certificate .step-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover/Fokus-Feedback */
 .step:focus-within,
 .step:hover {
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
@@ -169,26 +251,22 @@ body {
 
 /* SVG-Overlay: breite Linien ohne Spitzen */
 .flow {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    /* hinter den Karten */
-    pointer-events: none;
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+z-index: 0;         /* hinter den Karten */
+pointer-events: none;
 }
-
 .flow-path {
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+fill: none;
+stroke-linecap: round;
+stroke-linejoin: round;
 }
-
 .flow-path.main {
-    stroke: var(--arrow);
-    stroke-width: 30;
-    /* deutlich breiter */
-    opacity: 0.52;
+stroke: var(--arrow);
+stroke-width: 30;   /* deutlich breiter */
+opacity: 0.52;
 }
 
 .flow-path.bypass {
@@ -197,6 +275,7 @@ body {
     opacity: 0.50;
 }
 
+/* Footer */
 .site-footer {
     color: #5f6b7a;
     font-size: 0.95rem;
@@ -205,11 +284,13 @@ body {
     background: #f7fbfe;
 }
 
+/* Barrierefreiheit/Focus */
 summary.step-header:focus {
     outline: 3px solid rgba(25, 118, 210, 0.35);
     outline-offset: 2px;
 }
 
+/* Responsive Feinheiten */
 @media (max-width: 560px) {
     .step-header {
         padding: 16px 16px;
@@ -217,5 +298,11 @@ summary.step-header:focus {
 
     .step-content {
         padding: 0 16px 16px 16px;
+    }
+
+    .grade-indicator .grade-number {
+        left: -18vw;
+        font-size: clamp(120px, 32vw, 220px);
+        opacity: 0.07;
     }
 }
