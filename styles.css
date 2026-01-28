@@ -21,7 +21,7 @@
 
 html,
 body {
-    height: 100%;
+    /* height: 100%; */
 }
 
 body {
@@ -85,7 +85,6 @@ body {
     position: relative;
     margin: 28px 0 110px;
     padding: 10px 0 80px;
-    /* Platz unten für Linien */
 }
 
 /* Wasserzeichen: sehr große, transparente Jahrgangszahl links */
@@ -126,8 +125,8 @@ border-top: 3px dashed rgba(25, 118, 210, 0.22); /* dezent, gut sichtbar */
     content: attr(data-grade) " . Klasse";
     position: absolute;
     left: 0;
-    top: -18px;
-    font-size: 0.95rem;
+    /* top: 2.2rem; */
+    font-size: 2rem;
     color: var(--muted);
 }
 
@@ -152,7 +151,7 @@ z-index: 1; /* über den Linien */
     width: min(600px, 90vw);
 }
 
-/* Zeugnis-/Bericht-Rahmen (ohne Zickzack): doppelte, dezente Kontur */
+/* Zeugnis-/Bericht-Rahmen: doppelte, dezente Kontur */
 .step.certificate {
 border: 3px solid rgba(0, 162, 168, 0.35);
 border-radius: 22px;
