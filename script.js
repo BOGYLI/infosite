@@ -44,13 +44,16 @@
     function updateScale() {
         var vh = window.innerHeight || document.documentElement.clientHeight;
         var center = vh / 2;
+        var tlWidth = timeline.clientWidth;
+        // Zoom-Effekt auf schmalen Bildschirmen reduzieren
+        var scaleInfluence = tlWidth < 600 ? 0.05 : 0.2;
         for (var i = 0; i < steps.length; i++) {
             var el = steps[i];
             var rect = el.getBoundingClientRect();
             var elCenter = rect.top + rect.height / 2;
             var distance = Math.abs(elCenter - center);
             var influence = Math.max(0, 1 - distance / center);
-            var scale = 1 + 0.2 * influence;
+            var scale = 1 + scaleInfluence * influence;
             el.style.transform = 'scale(' + scale.toFixed(3) + ')';
         }
     }
