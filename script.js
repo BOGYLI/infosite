@@ -14,10 +14,24 @@
     function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
     // Zufällige Layout-Parameter speichern (stabil bei Resize)
     function randomizeLayout() {
+        var tlWidth = timeline.clientWidth;
+        var isMobile = tlWidth < 600; // Auf mobilen Geräten höhere Mindestwerte
+        
         for (var i = 0; i < steps.length; i++) {
             var el = steps[i];
             var isOpt = el.getAttribute('data-optional') === 'true';
-            var wf = isOpt ? randBetween(0.55, 0.75) : randBetween(0.65, 0.95); // optional schmaler
+            
+            // Auf mobilen Geräten: höhere Mindestwerte für bessere Lesbarkeit
+            var minWf, maxWf;
+            if (isOpt) {
+                minWf = isMobile ? 0.75 : 0.55;
+                maxWf = isMobile ? 0.95 : 0.75;
+            } else {
+                minWf = isMobile ? 0.85 : 0.65;
+                maxWf = isMobile ? 0.99 : 0.95;
+            }
+            
+            var wf = randBetween(minWf, maxWf);
             var pf = isOpt ? randBetween(0.65, 0.95) : randBetween(0.05, 0.95); // optional eher rechts
             var ax = randBetween(0.25, 0.75); // ein durchgängiger Punkt für oben/unten (nicht zu nah am Rand)
             el.setAttribute('data-wf', wf.toFixed(4));
